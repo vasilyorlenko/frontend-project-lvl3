@@ -1,0 +1,43 @@
+{
+  "name": "@hexlet/code",
+  "version": "1.0.0",
+  "description": "RSS aggregator",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vasilyorlenko/frontend-project-lvl3.git"
+  },
+  "keywords": [
+    "hexlet",
+    "school-project",
+    "rss-aggregator"
+  ],
+  "author": "Vasily Orlenko <orlenko.vasily.p@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vasilyorlenko/frontend-project-lvl3/issues"
+  },
+  "homepage": "https://github.com/vasilyorlenko/frontend-project-lvl3#readme",
+  "devDependencies": {
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^5.0.1",
+    "eslint": "^7.16.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-webpack-plugin": "^2.4.1",
+    "html-webpack-plugin": "^5.0.0-beta.1",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.11.1",
+    "webpack-cli": "^4.3.0",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.6.0",
+    "bootstrap": "^5.0.0-beta1"
+  }
+}
