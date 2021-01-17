@@ -2,6 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "RSS aggregator",
+  "main": "src/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -38,6 +39,11 @@
   },
   "dependencies": {
     "@popperjs/core": "^2.6.0",
-    "bootstrap": "^5.0.0-beta1"
+    "axios": "^0.21.1",
+    "bootstrap": "^5.0.0-beta1",
+    "i18next": "^19.8.4",
+    "lodash": "^4.17.20",
+    "on-change": "^2.2.1",
+    "yup": "^0.32.8"
   }
 }
