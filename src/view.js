@@ -1,49 +1,42 @@
+/* eslint-disable no-param-reassign */
+
 import onChange from 'on-change';
 import i18next from 'i18next';
 import { noop } from 'lodash';
 
-const feedsEl = document.querySelector('.feeds');
-const postsEl = document.querySelector('.posts');
-const inputEl = document.querySelector('.rss-form .form-control');
-const submitBtnEl = document.querySelector('.rss-form .btn');
-const feedbackEl = document.querySelector('.feedback');
-const modalTitleEl = document.querySelector('.modal-title');
-const modalBodyEl = document.querySelector('.modal-body');
-const fullArticleBtnEl = document.querySelector('.full-article');
-
-const renderInput = (options = { valid: true }) => {
+const renderInput = (elements, options = { valid: true }) => {
   if (options.valid) {
-    inputEl.classList.remove('is-invalid');
+    elements.input.classList.remove('is-invalid');
   } else {
-    inputEl.classList.add('is-invalid');
+    elements.input.classList.add('is-invalid');
   }
 };
 
-const clearFeedback = () => {
-  feedbackEl.classList.remove('text-success', 'text-danger');
-  feedbackEl.textContent = '';
+const clearFeedback = (elements) => {
+  elements.feedback.classList.remove('text-success', 'text-danger');
+  elements.feedback.textContent = '';
 };
 
-const renderFeedback = (message, options = { success: false }) => {
-  clearFeedback();
+const renderFeedback = (elements, message, options = { success: false }) => {
+  clearFeedback(elements);
   if (options.success) {
-    feedbackEl.classList.add('text-success');
+    elements.feedback.classList.add('text-success');
   } else {
-    feedbackEl.classList.add('text-danger');
+    elements.feedback.classList.add('text-danger');
   }
-  feedbackEl.textContent = message;
+  elements.feedback.textContent = message;
 };
 
-const renderModal = (state) => {
+const renderModal = (elements, state) => {
   const id = state.modal.postId;
   const { title, description, link } = state.posts.find((post) => post.id === id);
-  modalTitleEl.textContent = title;
-  modalBodyEl.textContent = description;
-  fullArticleBtnEl.setAttribute('href', link);
+  elements.modalTitle.textContent = title;
+  elements.modalBody.textContent = description;
+  elements.fullArticleBtn.setAttribute('href', link);
 };
 
-const renderFeeds = (state) => {
-  feedsEl.innerHTML = '';
+const renderFeeds = (elements, state) => {
+  elements.feeds.innerHTML = '';
 
   const feedsHeaderEl = document.createElement('h2');
   feedsHeaderEl.textContent = 'Feeds';
@@ -65,12 +58,12 @@ const renderFeeds = (state) => {
     feedListEl.appendChild(listItemEl);
   });
 
-  feedsEl.appendChild(feedsHeaderEl);
-  feedsEl.appendChild(feedListEl);
+  elements.feeds.appendChild(feedsHeaderEl);
+  elements.feeds.appendChild(feedListEl);
 };
 
-const renderPosts = (state) => {
-  postsEl.innerHTML = '';
+const renderPosts = (elements, state) => {
+  elements.posts.innerHTML = '';
 
   const postsHeaderEl = document.createElement('h2');
   postsHeaderEl.textContent = 'Posts';
@@ -106,25 +99,25 @@ const renderPosts = (state) => {
     postListEl.appendChild(listItemEl);
   });
 
-  postsEl.appendChild(postsHeaderEl);
-  postsEl.appendChild(postListEl);
+  elements.posts.appendChild(postsHeaderEl);
+  elements.posts.appendChild(postListEl);
 };
 
 const validationStateActions = {
   validating_form: noop,
   validating_uniqueness: noop,
-  passed: () => {
-    renderInput();
-    clearFeedback();
+  passed: (elements) => {
+    renderInput(elements);
+    clearFeedback(elements);
   },
-  failed: (previousValue) => {
-    renderInput({ valid: false });
+  failed: (elements, previousValue) => {
+    renderInput(elements, { valid: false });
     switch (previousValue) {
       case 'validating_form':
-        renderFeedback(i18next.t('errorMessages.invalidUrl'));
+        renderFeedback(elements, i18next.t('errorMessages.invalidUrl'));
         break;
       case 'validating_uniqueness':
-        renderFeedback(i18next.t('errorMessages.urlAlreadyAdded'));
+        renderFeedback(elements, i18next.t('errorMessages.urlAlreadyAdded'));
         break;
       default:
         throw new Error(`Unknown state: ${previousValue}`);
@@ -133,55 +126,55 @@ const validationStateActions = {
 };
 
 const loadingStateActions = {
-  requesting: () => {
-    inputEl.setAttribute('readonly', true);
-    submitBtnEl.disabled = true;
+  requesting: (elements) => {
+    elements.input.setAttribute('readonly', true);
+    elements.submitBtn.disabled = true;
   },
   parsing: noop,
-  finished: (state) => {
-    renderFeedback(i18next.t('successMessage'), { success: true });
-    renderFeeds(state);
-    renderPosts(state);
-    inputEl.removeAttribute('readonly');
-    submitBtnEl.disabled = false;
+  finished: (elements, state) => {
+    renderFeedback(elements, i18next.t('successMessage'), { success: true });
+    renderFeeds(elements, state);
+    renderPosts(elements, state);
+    elements.input.removeAttribute('readonly');
+    elements.submitBtn.disabled = false;
   },
-  failed: (_, previousValue) => {
+  failed: (elements, _, previousValue) => {
     switch (previousValue) {
       case 'requesting':
-        renderFeedback(i18next.t('errorMessages.networkError'));
+        renderFeedback(elements, i18next.t('errorMessages.networkError'));
         break;
       case 'parsing':
-        renderFeedback(i18next.t('errorMessages.parsingError'));
+        renderFeedback(elements, i18next.t('errorMessages.parsingError'));
         break;
       default:
         throw new Error(`Unknown state: ${previousValue}`);
     }
-    inputEl.removeAttribute('readonly');
-    submitBtnEl.disabled = false;
+    elements.input.removeAttribute('readonly');
+    elements.submitBtn.disabled = false;
   },
 };
 
 const updatingStateActions = {
   updating: noop,
-  updated: (state) => renderPosts(state),
+  updated: renderPosts,
 };
 
-export default (state) => onChange(state, (path, value, previousValue) => {
+export default (elements, state) => onChange(state, (path, value, previousValue) => {
   switch (path) {
     case 'validation':
-      validationStateActions[value](previousValue);
+      validationStateActions[value](elements, previousValue);
       break;
     case 'loading':
-      loadingStateActions[value](state, previousValue);
+      loadingStateActions[value](elements, state, previousValue);
       break;
     case 'updating':
-      updatingStateActions[value](state);
+      updatingStateActions[value](elements, state);
       break;
     case 'ui.viewedPostIds':
-      renderPosts(state);
+      renderPosts(elements, state);
       break;
     case 'modal.postId':
-      renderModal(state);
+      renderModal(elements, state);
       break;
     default:
       noop();

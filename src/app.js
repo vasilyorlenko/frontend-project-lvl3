@@ -61,6 +61,18 @@ const beginUpdatingCycle = (state, interval = 300000) => {
 };
 
 const runApp = () => {
+  const elements = {
+    feeds: document.querySelector('.feeds'),
+    posts: document.querySelector('.posts'),
+    form: document.querySelector('.rss-form'),
+    input: document.querySelector('.rss-form .form-control'),
+    submitBtn: document.querySelector('.rss-form .btn'),
+    feedback: document.querySelector('.feedback'),
+    modalTitle: document.querySelector('.modal-title'),
+    modalBody: document.querySelector('.modal-body'),
+    fullArticleBtn: document.querySelector('.full-article'),
+  };
+
   const state = {
     validation: null,
     loading: null,
@@ -75,10 +87,9 @@ const runApp = () => {
     posts: [],
   };
 
-  const watchedState = watch(state);
+  const watchedState = watch(elements, state);
 
-  const form = document.querySelector('.rss-form');
-  form.addEventListener('submit', (e) => {
+  elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
@@ -124,8 +135,7 @@ const runApp = () => {
       });
   });
 
-  const posts = document.querySelector('.posts');
-  posts.addEventListener('click', (e) => {
+  elements.posts.addEventListener('click', (e) => {
     const id = e.target.dataset?.id;
     if (!id) {
       return;
