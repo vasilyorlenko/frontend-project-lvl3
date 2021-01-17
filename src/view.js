@@ -4,7 +4,7 @@ import { noop } from 'lodash';
 
 const feedsEl = document.querySelector('.feeds');
 const postsEl = document.querySelector('.posts');
-const inputEl = document.querySelector('input');
+const inputEl = document.querySelector('.rss-form .form-control');
 const submitBtnEl = document.querySelector('.rss-form .btn');
 const feedbackEl = document.querySelector('.feedback');
 const modalTitleEl = document.querySelector('.modal-title');
@@ -134,6 +134,7 @@ const validationStateActions = {
 
 const loadingStateActions = {
   requesting: () => {
+    inputEl.setAttribute('readonly', true);
     submitBtnEl.disabled = true;
   },
   parsing: noop,
@@ -141,6 +142,7 @@ const loadingStateActions = {
     renderFeedback(i18next.t('successMessage'), { success: true });
     renderFeeds(state);
     renderPosts(state);
+    inputEl.removeAttribute('readonly');
     submitBtnEl.disabled = false;
   },
   failed: (_, previousValue) => {
@@ -154,6 +156,7 @@ const loadingStateActions = {
       default:
         throw new Error(`Unknown state: ${previousValue}`);
     }
+    inputEl.removeAttribute('readonly');
     submitBtnEl.disabled = false;
   },
 };
