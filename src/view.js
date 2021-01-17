@@ -80,6 +80,7 @@ const renderPosts = (elements, state) => {
     const fontWeight = state.ui.viewedPostIds.has(id) ? 'normal' : 'bold';
     linkEl.classList.add(`fw-${fontWeight}`, 'text-decoration-none');
     linkEl.setAttribute('href', link);
+    linkEl.setAttribute('role', 'link');
     linkEl.setAttribute('data-id', id);
     linkEl.setAttribute('target', '_blank');
     linkEl.setAttribute('rel', 'noopener noreferrer');
@@ -88,6 +89,7 @@ const renderPosts = (elements, state) => {
     const buttonEl = document.createElement('button');
     buttonEl.classList.add('btn', 'btn-primary', 'btn-sm');
     buttonEl.setAttribute('type', 'button');
+    buttonEl.setAttribute('role', 'button');
     buttonEl.setAttribute('data-id', id);
     buttonEl.setAttribute('data-bs-toggle', 'modal');
     buttonEl.setAttribute('data-bs-target', '#modal');
