@@ -3,3 +3,6 @@
 
 ### Linter & maintainability:
 ![Linter Status](https://github.com/vasilyorlenko/frontend-project-lvl3/workflows/lint/badge.svg) [![Maintainability](https://api.codeclimate.com/v1/badges/3ef2febd4d4d4fc23af5/maintainability)](https://codeclimate.com/github/vasilyorlenko/frontend-project-lvl3/maintainability)
+
+### Link
+The app is deployed [here](https://frontend-project-lvl3-orcin.vercel.app/).
