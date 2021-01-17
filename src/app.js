@@ -28,13 +28,13 @@ const arePostsIdentical = (post1, post2) => {
   return post1[property] === post2[property];
 };
 
-const beginUpdatingCycle = (state, interval = 300000) => {
+const beginUpdatingCycle = (state, interval = 5000) => {
   const update = () => setTimeout(() => {
     // eslint-disable-next-line
     state.updating = 'updating';
     const ids = state.feeds.map(({ id }) => id);
     const urls = state.feeds
-      .map(({ url }) => getProxiedUrl(url));
+      .map(({ url }) => url);
     const promises = urls.map((url) => axios.get(url));
 
     Promise.allSettled(promises)
@@ -109,8 +109,8 @@ const runApp = () => {
     watchedState.validation = 'passed';
 
     watchedState.loading = 'requesting';
-    const proxiedURL = getProxiedUrl(url);
-    axios.get(proxiedURL)
+    // const proxiedURL = getProxiedUrl(url);
+    axios.get(url)
       .then(({ data }) => {
         watchedState.loading = 'parsing';
         return parse(data);
