@@ -6,7 +6,14 @@ import resources from './locales';
 import watch from './view.js';
 import parse from './parse.js';
 
-const getProxiedUrl = (url) => `https://cors-anywhere.herokuapp.com/${url}`;
+const proxyServices = {
+  corsanywhere: (url) => `https://cors-anywhere.herokuapp.com/${url}`,
+  allorigins: (url) => (
+    `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`
+  ),
+};
+
+const getProxiedUrl = (url) => proxyServices.allorigins(url);
 
 const buildPosts = (feedId, items) => items.map((item) => {
   const {
@@ -34,7 +41,7 @@ const beginUpdatingCycle = (state, interval = 5000) => {
     state.updating = 'updating';
     const ids = state.feeds.map(({ id }) => id);
     const urls = state.feeds
-      .map(({ url }) => url);
+      .map(({ url }) => getProxiedUrl(url));
     const promises = urls.map((url) => axios.get(url));
 
     Promise.allSettled(promises)
@@ -109,8 +116,8 @@ const runApp = () => {
     watchedState.validation = 'passed';
 
     watchedState.loading = 'requesting';
-    // const proxiedURL = getProxiedUrl(url);
-    axios.get(url)
+    const proxiedURL = getProxiedUrl(url);
+    axios.get(proxiedURL)
       .then(({ data }) => {
         watchedState.loading = 'parsing';
         return parse(data);
