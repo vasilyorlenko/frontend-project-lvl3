@@ -3,9 +3,9 @@ export default {
     errorMessages: {
       invalidUrl: 'Must be valid url',
       urlAlreadyAdded: 'Source has already been added',
-      networkError: 'Network request failed',
-      parsingError: 'Source does not contain valid RSS',
+      networkError: 'Network error',
+      parsingError: 'This source doesn\'t contain valid rss',
     },
-    successMessage: 'New RSS feed has been loaded',
+    successMessage: 'Rss has been loaded',
   },
 };
