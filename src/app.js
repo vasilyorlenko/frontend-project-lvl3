@@ -6,14 +6,9 @@ import resources from './locales';
 import watch from './view.js';
 import parse from './parse.js';
 
-const proxyServices = {
-  corsanywhere: (url) => `https://cors-anywhere.herokuapp.com/${url}`,
-  allorigins: (url) => (
-    `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`
-  ),
-};
-
-const getProxiedUrl = (url) => proxyServices.allorigins(url);
+const getProxiedUrl = (url) => (
+  `https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${encodeURIComponent(url)}`
+);
 
 const buildPosts = (feedId, items) => items.map((item) => {
   const {
@@ -50,7 +45,7 @@ const beginUpdatingCycle = (state, interval = 5000) => {
       ))
       .then((results) => results.filter(({ status }) => status === 'fulfilled'))
       .then((results) => results.flatMap(({ response, id }) => {
-        const { items } = parse(response.data);
+        const { items } = parse(response.data.contents);
         return buildPosts(id, items);
       }))
       .then((posts) => differenceWith(posts, state.posts, arePostsIdentical))
@@ -118,9 +113,9 @@ const runApp = () => {
     watchedState.loading = 'requesting';
     const proxiedURL = getProxiedUrl(url);
     axios.get(proxiedURL)
-      .then(({ data }) => {
+      .then(({ data: { contents } }) => {
         watchedState.loading = 'parsing';
-        return parse(data);
+        return parse(contents);
       })
       .then(({ title, description, items }) => {
         const feedId = uniqueId();
