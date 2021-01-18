@@ -77,8 +77,8 @@ const renderPosts = (elements, state) => {
     );
 
     const linkEl = document.createElement('a');
-    const fontWeight = state.ui.viewedPostIds.has(id) ? 'normal' : 'bold';
-    linkEl.classList.add(`fw-${fontWeight}`, 'text-decoration-none');
+    const fw = state.ui.viewedPostIds.has(id) ? 'normal' : 'bold';
+    linkEl.classList.add(`fw-${fw}`, `font-weight-${fw}`, 'text-decoration-none');
     linkEl.setAttribute('href', link);
     linkEl.setAttribute('role', 'link');
     linkEl.setAttribute('data-id', id);

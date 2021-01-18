@@ -7,7 +7,7 @@ import watch from './view.js';
 import parse from './parse.js';
 
 const getProxiedUrl = (url) => (
-  `https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${encodeURIComponent(url)}`
+  `https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${url}`
 );
 
 const buildPosts = (feedId, items) => items.map((item) => {
