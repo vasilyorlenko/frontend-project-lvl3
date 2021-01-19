@@ -10,6 +10,9 @@ const getProxiedUrl = (url) => (
   `https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${url}`
 );
 
+const isUrlUnique = (url, links) => !links
+  .some((link) => link.includes(url) || url.includes(link));
+
 const buildPosts = (feedId, items) => items.map((item) => {
   const {
     guid, pubDate, link, title, description,
@@ -102,9 +105,10 @@ const runApp = () => {
       watchedState.validation = 'failed';
       return;
     }
+
     watchedState.validation = 'validating_uniqueness';
     const links = watchedState.feeds.map((f) => f.url);
-    if (!string().notOneOf(links).isValidSync(url)) {
+    if (!isUrlUnique(url, links)) {
       watchedState.validation = 'failed';
       return;
     }
